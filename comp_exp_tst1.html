@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head><title>Ian's Javascript expression compiler test page vers 4.0</title>
+<!--
+<p>
+See www.pouncy.co.uk for author's website.
+COPYRIGHT NOTICE.: The code associated with this page  is copyright  (C)  by Ian Pouncy 7/6/16.<br>
+  under the   GNU GENERAL PUBLIC LICENSE,  Version 3, 29 June 2007 , see Free Software Foundation, Inc. <a href="http://fsf.org" title="Link to Free software Foundation Website">http://fsf.org</a><br>
+This means you can use it if you want under the terms of that licence.<br>
+This source code  has been registered on github (user name Ianp44) on 27/7/16<br>
+-->
+<script src= "comp_opcodes1.js"></script>
+<script src= "comp_runtime1.js"></script>
+<script src= "comp_exp_display_tree1.js"></script>
+
+<script src= "comp_expcomp1.js"></script>
+<script src= "comp_equations1.js"></script>
+<script src= "comp_buttons1.js"></script>
+
+
+
+<style type="text/css">
+.id1divclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	position: relative;
+	width: 908px;
+	left: 9px;
+
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+.id1pclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	border: 1px solid #00F;
+}
+
+.idprgclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	//border: 1px solid #00F;
+}
+.idstackclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	//border: 1px solid #00F;
+}
+.button_class {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+}
+.buttonhlpclass {
+	border: 1px solid #00F;
+	width: 600px;
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	font-weight: bold;
+}
+.form_class_id {
+	font-family: "Courier New";
+	font-size: 12pt;
+}
+.treedivclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	color: #090;
+}
+.bgclass {
+	background-color: #F00;
+}
+.itxtclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+}
+.zred {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	font-weight: bold;
+	color: #F00;
+}
+.bclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+}
+.disp1class {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	background-color: #FFF;
+	border: 1px solid #F00;
+	position: absolute;
+	z-index: 1;
+	height: 600px;
+	width: 800px;
+	left: 86px;
+	top: 600px;
+	visibility: hidden;
+}
+.equations1class {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	background-color: #FFF;
+	border: 1px solid #00F;
+	position: absolute;
+	z-index: 1;
+	height: 600px;
+	width: 800px;
+	left: 50px;
+	top: 600px;
+	visibility: hidden;
+}
+.ccbold20 {
+	font-family: "Times New Roman";
+	font-size: 20pt;
+	font-weight: bold;
+}
+.buttonhelpclass {
+	border: 1px solid #0F0;
+	font-family: "Courier New";
+	font-size: 12pt;
+	font-weight: bold;
+	color: #0F0;
+	background-color: #FFF;
+}
+
+.opcodetabclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	font-weight: bold;
+	border: 1px solid #000;
+	width: 600px;
+}
+.howtographdivclass {
+	font-family: "Times New Roman";
+	font-size: 12pt;
+	border: 2px solid #F00;
+	position: relative;
+	width: 800px;
+	left: 40px;
+	padding: 15px;
+	font-weight: bold;
+}
+.zred2 {
+	font-family: "Times New Roman";
+	font-size: 20pt;
+	font-weight: bold;
+	color: #F00;
+}
+</style>
+</head>
+<body class="bclass" onload="test_labtab()">
+<p><b>Ian's Javascript Expression Compiler   Beta Demo Page</b><br>
+  (Version 4.0 5/7/16  works mostly ok.)
+<br><a href="compiler_help1.html?glossname=About">
+About</a><br>
+<br>
+<strong>Development History</strong><br>
+
+  <span class="zred"></span>Now (as of 16/6/16) the parse tree it displays has an option to be in a more readable simpler format. (&quot;Parse to tree test&quot; button.)<br>
+Test routines will also create and display a test parse output tree structure. )<br>
+Now (as of 18/6/16) have fixed bugs in function parameter list parsing. Also now supports the comma operator. <span class="zred"><br>
+</span><br>
+<span class="zred">Now (as of 5/7/16) easier to see how to get it to graph an equation and work, if you aren't familiar with compilers.<br>
+(See the compile run and graph an equation box lower down the page.)
+</span></p>
+<p><span class="zred">(As of 28/6/16) has some sensible help associated with it, which needs properly typed up.</span><br>
+  <span class="zred">Can now (as of 28/6/16) parse the input text expression, generate intermediate code and run it, including to <br>
+  graph a curve.
+<br>
+  <br>
+  Bugs are:-<br>
+String literal expressions will compile but not run.<br>
+  Arithmetic operators of same priority probably associate right to left not left to right at the moment.<br>
+  Arity on functions is not checked so if you type in the wrong number of paramaters to a function it will<br>
+  create a stack error at run time.<br>
+  I think there is a bug in parsing function parameter lists, the cure is probably to use brackets to avoid<br>
+  ambiguity.<br>
+  Good luck!
+</span><span class="zred"> <br>
+  </span> <br>
+</p>
+
+<p><a href="../default.htm">Back to  Index Page </a>
+
+  <br>
+  <center>
+  <a href="compiler_help1.html?glossname=Compiler_Glossary" title="Link to Compiler Help and technical Glossary" class="ccbold20">Compiler Help and Technical Glossary</a><br>
+  </center>
+  
+
+<b><br>
+View Source Code</b>:<br>
+  <a href="../filedump1.php?javascript/comp_exp_tst1.html">View Page Source</a> , <a href="../filedump1.php?javascript/comp_expcomp1.js">View Main Compiler Routines Source</a>, <a href="../filedump1.php?javascript/comp_exp_display_tree1.js">View Compiler Test and Interface Routines Source</a><br>
+  </a><a href="../filedump1.php?javascript/comp_opcodes1.js">View Opcodes Module</a> , <a href="../filedump1.php?javascript/comp_runtime1.js">View Runtime Module </a> , <a href="../filedump1.php?javascript/comp_equations1.js">View Equation Data Module </a>,
+  <a href="../filedump1.php?javascript/comp_buttons1.js">View Buttons Data Module </a>
+  
+  
+  
+  <b></b><br><br>
+  What is a compiler? <a href="https://en.wikipedia.org/wiki/Compiler" title="Link to wikipedia entry for compiler.">Look at Wikipedia entry</a>
+  <br>
+  <br>
+  What is an expression compiler? It is a small compiler than parses/compiles an arithmetic expression only <br>
+  (not a whole proper program), then creates some kind
+  of computer friendly intermediate code, which, if run,<br>
+  will compute the value of the arithmetic expression. <br>
+  <br>
+  <strong>Buttons Help: Click on the
+  <button class="buttonhelpclass" onclick="help_button2('Help_About_Button_Help')">?</button>  
+  for help on the button to the left. Click here 
+  <button class="buttonhelpclass" onclick="help_button2('Help_About_Button_Help')">?</button> 
+  for help about this.</strong><br>
+
+</p>
+<div class="howtographdivclass">
+<p class="zred2" style="text-align:center">To Choose, Compile and Run and Graph an <br>
+equation, do the following.</p>
+
+Select an equation using the 
+<button onclick="show_equations()">Show Equations Box</button>
+<button class="buttonhelpclass" onclick="help_button2('Show_Equations_Box')">?</button>
+ button. Then compile, run and graph it using the 
+ <button onclick="compile2_graph()">Complete Compile and Run and Graph</button>
+<button class="buttonhelpclass" onclick="help_button2('Complete_Compile_and_Run_and_Graph')">?</button>
+ button.<br>
+ (You will then have to close the graph window 
+ using the close graph window button.)<br>
+ You can view and edit the text in the
+Compiler Input Text Box
+(see lower down the page)
+ <button class="buttonhelpclass" onclick="help_button('Compiler_Input_Text_Box')">?</button>
+<span class="idprgclass" id="idprg3"> and try to compile and run it again.<br>
+You  can also view the parse tree </strong></span><strong>output (displayed lower down the page) using the 
+<button onclick="display_out_tree()">Display Parse Tree</button>
+<button class="buttonhelpclass" onclick="help_button2('Display_Parse_Tree')">?</button>
+ button.<br>
+Or you can also view the output intermediate object code  (displayed lower down the page)<br>
+using the 
+<button onclick="display_code()">Display Intermediate Code</button>
+<button class="buttonhelpclass" onclick="help_button2('Display_Intermediate_Code')">?</button> 
+button.
+<p><br>
+  <br>
+</p>
+</div>
+
+<p><strong>Old Test Buttons <span class="zred">(These are a bit out of date at the moment, see lower down for the right buttons to use.)</span></strong><br>
+<!--
+  <span  id="button_help">
+  </span><br>
+  -->
+  
+  <!--
+  Get Input Text simply redisplays the text you can type into the input text box.</p>
+<p>The lable table and string array object routines are working ok so far. <br>
+A lot of the other routines are written (see the source code) but haven't been tested yet.<br>
+<br>
+  The label table can be tested using the Test Initialisation Button, which intialises the lable table
+  and then displays it.<br>
+  (See lower down the page for the output.)
+  This also uses the array text string object routines.<br>
+  <br>
+  <span class="zred">Test initialisation is now performed automaticaly when the page loads.</span><br>
+  <br>
+  The Test String Objects button tests the array text string objects, which redisplay the <br>
+  text from the text input box. Note the '!' change in the text, which is done by the array string objects
+  routines.<br>
+  What they are actually doing is converting the text input box text string javascript string to
+  my <br>
+  (written by me) array text string object,copying it again,  putting in a '!' and converting it back to a javascript text
+  string.<br>
+  These routines have some advantages over the javascript text strings.<br>
+  <br>
+  The Test Arrays button tests that the intialisation data arrays are working correctly.<br>
+</p>
+<p>The Test Tree Routines button creates a pars output test tree and displays it at the bottom of the page.</p>
+<p>The Parstoken Test button will pars out tokens (symbols that mean something) from the input text<br>
+  and display a list of tokens at the bottom of the page. A number (can be a decimal )or a string
+or something from the lable table<br>
+(eg. +- [ ]) is  a valid token.<br>
+<br>
+<br>
+  
+  -->
+  
+  
+  
+  <b>Click the buttons to run the tests if you want, or see the help.</b><br>
+
+</p><span class="button_class">
+
+<span id="buttons_span">buttons text</span>
+
+<br>
+
+
+
+<br>
+<br>
+<p><strong><br>
+  <br>
+  </strong><strong>Buttons you want to use. (Not out of date test buttons.)</strong><br>
+  
+  To compile and run a program or graph a function, first enter your text into the 
+  input box either by typing or editing it manually, or by using the :<br>
+  
+</p>
+<button onclick="show_equations()">Show Equations Box</button><button class="buttonhelpclass" onclick="help_button2('Show_Equations_Box')">?</button>  <br>
+
+To compile and run your expression you have a choice of the following:<br>
+<button onclick="top_parse_test0()">Compile to Tree Only</button> 
+<button class="buttonhelpclass" onclick="help_button2('Compile_to_Tree_Only')">?</button>  which will attempt to<br>
+compile your expression and generate and display a parse tree. (Lower down page.)<br>
+<button onclick="compile2()">Complete Compile</button> 
+<button class="buttonhelpclass" onclick="help_button2('Complete_Compile')">?</button>  which will attempt to compile your<br>
+expression to a parse tree and then if that is successful, attempt to generate intermediat code from it and then display it.<br>
+<button onclick="compile2_run()">Complete Compile and Run</button> 
+<button class="buttonhelpclass" onclick="help_button2('Complete_Compile_and_Run')">?</button>  which will attempt to do a  complete compile<br>
+then if that is successful, run the intermediate code as a program which will yield a displayed result if successful.<br>
+<button onclick="compile2_graph()">Complete Compile and Run and Graph</button> 
+<button class="buttonhelpclass" onclick="help_button2('Complete_Compile_and_Run_and_Graph')">?</button> For graphing equations.  This will attempt to do a  complete compile<br>
+then if that is successful, run the intermediate code as a program to plot the curve graphically.<br>Use
+this option if the expression is intended to be for a graph.<br>
+
+<br>
+<b>Related Buttons</b><br>
+These two buttons will run the intermediate code if it has aleady been compiled without recompiling it.<br>
+<button onclick="zrunprg()">Reset and Run</button><button class="buttonhelpclass" onclick="help_button2('Reset_and_Run')">?</button>
+This runs the program and displays the result if successful. Use for expressions that are not intended to be for graphs.<br>
+<button onclick="graph_equation()">Graph Equation</button><button class="buttonhelpclass" onclick="help_button2('Graph_Equation')">?</button>
+This runs the program and graphs the result if successful. Use for expressions that are  intended to be for graphs.<br>
+<b>Code Display Buttons</b><br>
+<button onclick="display_out_tree()">Display Parse Tree</button><button class="buttonhelpclass" onclick="help_button2('Display_Parse_Tree')">?</button>Displays the parse tree (lower down the page) if it exists.<br>
+<button onclick="display_code()">Display Intermediate Code</button>
+<button class="buttonhelpclass" onclick="help_button2('Display_Intermediate_Code')">?</button>Displays the parse tree (lower down the page) if it exists.<br>
+
+
+
+
+<br>
+<br>
+
+Alternatively you can reset/single step through the intermediate code  (without graphing anything) using these buttons:<br>
+The stack and Program counter position are displayed at each step.<br>
+<button onclick="zreset_prg()">Reset Program</button><button class="buttonhelpclass" onclick="help_button2('Reset_Program')">?</button>
+This resets the program counter to the start of the program and clears the program stack.<br>
+<button onclick="zsstep()">Single Step</button><button class="buttonhelpclass" onclick="help_button2('Single_Step')">?</button>
+This single steps through the intermediate code program display the stack as it does.<br>
+
+
+
+<!--
+
+<button onclick="incstacksp()">Increment Stack Pointer</button>
+--
+
+
+
+
+</span>
+
+<!--- 
+,
+<button onclick="tst1()">Run Javascript Tst</button>
+-->
+
+<br>
+<br>
+<strong>Compiler Input Text Box</strong><button class="buttonhelpclass" onclick="help_button('Compiler_Input_Text_Box')">?</button> 
+<!--
+(You can type what you like in here. Try a sensible arithmetic expression or use the Equation box to help you.<br>
+Allowable symbols are + - * and ',' . ',' is the comma operator which is allowed.<br>
+Also allowed are built in functions 
+sin(&lt;expression&gt;), pow(&lt;expression&gt;,&lt;expression&gt;), and x() which yields the horizontal pixel<br>
+position to calculate with when graphing a function
+and decimal and whole numbers and character string literals.<br>
+Arithmetic operators are parsed using the correct javascript priority.<br>
+Unary minus is not yet supported. Strings literal will compile but not run correctly as of 28/6/16.)<br>
+
+Arity is not checked at the moment , so if you mismatch the number of paramaters to a function you
+will get a run time stack error<br>
+and your program won't work.
+<br>
+-->
+<span class="idprgclass" id="idprg2">Gptr text </span><button class="buttonhelpclass" onclick="help_button('Expression_Compiler_Result_Text')">?</button> <br>
+
+
+<form class="form_class_id" id="prgform">
+<textarea name="textin" cols="150" rows="6" class="itxtclass">
+1+2+(3*5)+6
+</textarea>
+</form>
+<br>
+<div id="disp1" class="disp1class">
+  
+</div>
+<div id="equations1" class="equations1class">
+  
+</div>
+
+<p ><b>Parse Error Report:</b><button class="buttonhelpclass" onclick="help_button('Parse_Error_Report_Text')">?</button><br> <span id="parserror_id"> Pars Error span text<br></span></p>
+<p ><b>Error Report:</b><button class="buttonhelpclass" onclick="help_button('Error_Report_Text')">?</button><br> <span id="errid"> Error span text<br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+<br></span></p>
+<p class="id1pclass" id="id1">id1 p text </p>
+<button onclick="zreset_prg()">Reset Program</button>,
+<button onclick="zsstep()">Single Step</button><br>
+
+<p class="idprgclass" id="idprg">Gptr text </p>
+<p class="idstackclass" id="idstack">stack text </p>
+<div class="id1divclass" id="iddiv1">id1 div text </div>
+<br>
+  <br>
+  <br>
+  <br>
+
+</body>
+</html> 
