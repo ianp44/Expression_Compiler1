@@ -3,7 +3,13 @@
 By Ian Pouncy
 Edinburgh
 UK
-Javascript and associated HTML pages for my demo expression compiler Beta Version 4.0
+
+COPYRIGHT NOTICE
+All the code is copyright (C) under the 7/6/16 udner the GNU Public Licence
+which means you can use if you wish under the terms of that Licence.
+
+
+All the Javascript and associated HTML pages for my demo expression compiler Beta Version 4.0
 
 These are all the Javascript and HTML files that make an expression compiler
 which can pars a near Javascript expression in x() to a pars tree and then intermediate code
